@@ -1,7 +1,7 @@
 const rad0 = r => 1 + 3 * r;
 const rad = r => 15 + 5 * r;
 
-var width = 1500,
+var width = 1200,
     height = 700;
 
 var nodes = data.map(d =>
