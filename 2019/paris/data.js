@@ -8,7 +8,7 @@ var data = [
     { marbles: 8, image: "./images/31921", name: " " },
     { marbles: 1, image: "./images/31659", name: " " },
     { marbles: 4, image: "./images/33435", name: " " },
-    { marbles: 1, image: "./images/29952", name: " " },
+    { marbles: 9, image: "./images/29952", name: " " },
     { marbles: 7, image: "./images/30249", name: " " },
     { marbles: 1, image: "./images/42275", name: " " },
     { marbles: 6, image: "./images/32167", name: " " },
