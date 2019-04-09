@@ -1,8 +1,9 @@
 const rad0 = r => 1 + 3 * r;
-const rad = r => 15 + 5 * r;
+const rad = r => 5 + 3 * r;
 
-var width = 1200,
-    height = 700;
+var width = .9* window.innerWidth,
+    height = .9*window.innerHeight
+
 
 var nodes = data.map(d =>
         Object.assign(d, { radius: d.name ? rad(d.marbles) : rad0(d.marbles) })
@@ -23,13 +24,15 @@ var force = d3.layout
 
 force.start();
 
-var svg = d3
-    .select("#root")
+
+var svg = d3.select("#root")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
     .style("display", "block")
-    .style("margin", "auto");
+    .style("margin", "auto")
+    .call(responsivefy);
+
 
 var node = svg
     .selectAll(".node")
@@ -40,10 +43,7 @@ var node = svg
 
 node.append("circle")
     .attr("r", d => d.radius)
-    // .style("fill", (d, i) => color(i % 3))
     .style("fill", "orange");
-// .style("stroke", "orange")
-// .style("stroke-width", d => (d.name ? padding : 0));
 
 var defs = node.append("defs").attr("id", "imgdefs");
 
@@ -63,10 +63,6 @@ node.append("image")
     .attr("xlink:href", d => d.image)
     .attr("clip-path", d => `url(#clip-circle-${d.image.slice(1)})`);
 
-// node.append("text")
-//       .text(d => `${d.marbles ? d.marbles : ''}`)
-//       .attr('x', 6)
-//       .attr('y', 3);
 
 force.on("tick", e => {
     var q = d3.geom.quadtree(nodes),
@@ -107,4 +103,32 @@ function collide(node) {
         }
         return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
     };
+}
+
+
+function responsivefy(svg) {
+    // get container + svg aspect ratio
+    var container = d3.select(svg.node().parentNode),
+        width = parseInt(svg.style("width")),
+        height = parseInt(svg.style("height")),
+        aspect = width / height;
+
+    // add viewBox and preserveAspectRatio properties,
+    // and call resize so that svg resizes on inital page load
+    svg.attr("viewBox", "0 0 " + width + " " + height)
+        .attr("perserveAspectRatio", "xMinYMid")
+        .call(resize);
+
+    // to register multiple listeners for same event type, 
+    // you need to add namespace, i.e., 'click.foo'
+    // necessary if you call invoke this function for multiple svgs
+    // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+    d3.select(window).on("resize." + container.attr("id"), resize);
+
+    // get width of container and resize svg to fit it
+    function resize() {
+        var targetWidth = parseInt(container.style("width"));
+        svg.attr("width", targetWidth);
+        svg.attr("height", Math.round(targetWidth / aspect));
+    }
 }
