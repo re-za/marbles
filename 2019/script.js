@@ -1,4 +1,4 @@
-const rad0 = r => 1 + 3 * r;
+const rad0 = r => 1 + 5 * r;
 const rad = r => 5 + 3 * r;
 
 var width = .9* window.innerWidth,
